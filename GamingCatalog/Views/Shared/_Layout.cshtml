@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GamingCatalog</title>
+
+    <link href="/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">  
+
+    <link href="/vendor/bootstrap/js/bootstrap.js" rel="stylesheet">
+    <link href="css/grayscale.min.css" rel="stylesheet">
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+            <a asp-controller="Home" asp-action="Index" class="navbar-brand js-scroll-trigger"><img class="logo" src="~/img/GamingLogo.png"></a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Games" asp-action="Index">Catalog</a>
+                    </li>
+                    @{
+                        var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+                    }
+                    @if (controllerName == "Home")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="#projects">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" asp-controller="Genres" asp-action="Create">Genres</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" asp-controller="Manufacturers" asp-action="Create">Manufacturers</a>
+                        </li>
+
+                    }
+                    <li>
+                        <a asp-controller="Games" asp-action="Create" class="btn nav-link btn-dark btn-group-toggle" style="margin-left: 74px; margin-right: -139px; color:white;">Add Game</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div>
+        <main role="main" class="pb-3" >
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-black small text-center text-white-50">
+        <div class="container">
+            Gaming Catalog 2020
+        </div>
+    </footer>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/vendor/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/vendor/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    <script src="js/grayscale.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
