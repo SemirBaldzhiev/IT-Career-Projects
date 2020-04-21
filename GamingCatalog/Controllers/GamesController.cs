@@ -27,12 +27,11 @@ namespace GamingCatalog.Controllers
         }
 
         // GET: Games
-        public async Task<IActionResult> Index(string searchString, string gameManufacturer)
+        public  IActionResult Index(string searchString, string gameManufacturer)
         {
             //var gameDbContext = _context.Games.Include(g => g.Manufacturer);
             var manufacturerList = new List<string>();
           
-
             var manufacturers = _context.Games.Select(g => g.Manufacturer.Name).ToList();
 
             manufacturerList.AddRange(manufacturers.Distinct());
@@ -45,14 +44,12 @@ namespace GamingCatalog.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                games = games.Where(g => g.Title.Contains(searchString)).ToList();
+                games = _gameRepository.SearchByTittle(searchString).ToList();
             }
             if (!string.IsNullOrEmpty(gameManufacturer))
             {
-                games = games.Where(g => g.Manufacturer.Name == gameManufacturer).ToList();
+                games = _gameRepository.SearchByManufacturer(gameManufacturer).ToList();
             }
-
-         
 
             return View(games.ToList());
         }
@@ -166,27 +163,31 @@ namespace GamingCatalog.Controllers
             {
                 try
                 {
-                    //if (Genres != null)
-                    //{
+                    if (Genres != null)
+                    {
+                        var gameGenres = _context.GameGenreConnection.Where(g => g.GameId == id).ToList();
 
-                    //    //var gameGenres = _context.GameGenreConnection.Where(g => g.GameId == id).ToList();
+                        var genersId = gameGenres.Select(g => g.GenreId).ToList();
+                        foreach (var genreId in Genres)
+                        {
+                            if (!genersId.Contains(genreId))
+                            {
+                                var genre = _context.Genres.Find(genreId);
 
+                                var gameGenre = new GameGenreConnection()
+                                {
+                                    Game = game,
+                                    Genre = genre
+                                };
 
-                    //    foreach (var genreId in Genres)
-                    //    {
-                    //        var genre = _context.Genres.Find(genreId);
-
-                    //        var gameGenre = new GameGenreConnection()
-                    //        {
-                    //            Game = game,
-                    //            Genre = genre
-                    //        };
-
-                    //        _context.GameGenreConnection.Update(gameGenre);
-                            
-                    //    }
-
-                    //}
+                                _context.GameGenreConnection.Update(gameGenre);
+                            }
+                            else
+                            {
+                                //this genre already exist
+                            }
+                        }
+                    }
                     using (var stream = new MemoryStream())
                     {
                         await Image.CopyToAsync(stream);
@@ -237,7 +238,7 @@ namespace GamingCatalog.Controllers
         // POST: Games/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public  IActionResult DeleteConfirmed(int id)
         {
             var game =  _gameRepository.GetById(id);
 
@@ -249,7 +250,6 @@ namespace GamingCatalog.Controllers
             }
 
             _gameRepository.Remove(game);
-            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

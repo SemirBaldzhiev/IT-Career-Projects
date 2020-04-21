@@ -7,22 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Data;
 using Data.Entities;
+using Data.Repositories;
 
 namespace GamingCatalog.Controllers
 {
     public class ManufacturersController : Controller
     {
         private readonly GameDbContext _context;
+        private readonly ManufacturerRepository _manufacturerRepository;
 
         public ManufacturersController(GameDbContext context)
         {
             _context = context;
+            _manufacturerRepository = new ManufacturerRepository(context);
         }
 
         // GET: Manufacturers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Manufacturers.ToListAsync());
+            return View(await _manufacturerRepository.GetAll().ToListAsync());    
         }
 
         // GET: Manufacturers/Details/5
@@ -54,12 +57,11 @@ namespace GamingCatalog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Manufacturer manufacturer)
+        public IActionResult Create([Bind("Id,Name")] Manufacturer manufacturer)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(manufacturer);
-                await _context.SaveChangesAsync();
+                _manufacturerRepository.Add(manufacturer);
                 return RedirectToAction(nameof(Index));
             }
             return View(manufacturer);
@@ -86,7 +88,7 @@ namespace GamingCatalog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Manufacturer manufacturer)
+        public  IActionResult Edit(int id, [Bind("Id,Name")] Manufacturer manufacturer)
         {
             if (id != manufacturer.Id)
             {
@@ -97,8 +99,7 @@ namespace GamingCatalog.Controllers
             {
                 try
                 {
-                    _context.Update(manufacturer);
-                    await _context.SaveChangesAsync();
+                    _manufacturerRepository.Update(manufacturer);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -137,11 +138,10 @@ namespace GamingCatalog.Controllers
         // POST: Manufacturers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public  IActionResult DeleteConfirmed(int id)
         {
-            var manufacturer = await _context.Manufacturers.FindAsync(id);
-            _context.Manufacturers.Remove(manufacturer);
-            await _context.SaveChangesAsync();
+            var manufacturer = _manufacturerRepository.GetById(id);
+            _manufacturerRepository.Remove(manufacturer);
             return RedirectToAction(nameof(Index));
         }
 

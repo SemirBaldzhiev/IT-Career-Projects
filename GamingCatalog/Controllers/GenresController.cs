@@ -7,22 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Data;
 using Data.Entities;
+using Data.Repositories;
 
 namespace GamingCatalog.Controllers
 {
     public class GenresController : Controller
     {
         private readonly GameDbContext _context;
+        private readonly GenreRepository _genreRepository;
 
         public GenresController(GameDbContext context)
         {
             _context = context;
+            _genreRepository = new GenreRepository(context);
         }
 
         // GET: Genres
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Genres.ToListAsync());
+            return View(await _genreRepository.GetAll().ToListAsync());
         }
 
         // GET: Genres/Details/5
@@ -54,14 +57,13 @@ namespace GamingCatalog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Genre genre)
+        public IActionResult Create([Bind("Id,Name")] Genre genre)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(genre);
-                await _context.SaveChangesAsync();
+                _genreRepository.Add(genre);
                 return RedirectToAction(nameof(Index));
-            }
+            }   
             return View(genre);
         }
 
@@ -86,7 +88,7 @@ namespace GamingCatalog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Genre genre)
+        public IActionResult Edit(int id, [Bind("Id,Name")] Genre genre)
         {
             if (id != genre.Id)
             {
@@ -97,8 +99,7 @@ namespace GamingCatalog.Controllers
             {
                 try
                 {
-                    _context.Update(genre);
-                    await _context.SaveChangesAsync();
+                    _genreRepository.Update(genre);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -137,11 +138,10 @@ namespace GamingCatalog.Controllers
         // POST: Genres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var genre = await _context.Genres.FindAsync(id);
-            _context.Genres.Remove(genre);
-            await _context.SaveChangesAsync();
+            var genre = _genreRepository.GetById(id);
+           _genreRepository.Remove(genre);
             return RedirectToAction(nameof(Index));
         }
 

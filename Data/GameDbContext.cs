@@ -59,7 +59,6 @@ namespace Data
                 genre
                     .Property(g => g.Name)
                     .IsRequired(true);
-
                 
             });
 

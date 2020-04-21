@@ -17,12 +17,12 @@ namespace Tests.RepositoryTests
     public class GameRepositoryTest
     {
 
-        private List<Game> GetTestData = new List<Game>
+        private readonly List<Game> GetTestData = new List<Game>
             {
                 new Game()
                 {
                     Id = 1,
-                    Title = "dsds",
+                    Title = "fdfdsds",
                     Price = 13m,
                     Rating = 2,
                     Description = "dsdsdsd",
@@ -181,6 +181,41 @@ namespace Tests.RepositoryTests
             Assert.Equal(expectedCount, repository.Count());
         }
 
+        [Fact]
+        public void TestSearchByTitle_ShouldRrturnAllGamesWithGivenTitle()
+        {
+            var options = new DbContextOptionsBuilder<GameDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            var title = "fdf";
+            var context = new GameDbContext(options);
+            SeedData(context);
+            var repository = new GameRepository(context);
+
+
+            var actualResult = repository.SearchByTittle(title).ToList();
+           
+            Assert.Equal(2, actualResult.Count);
+        }
+
+        [Fact]
+        public void TestSearchByManufacturer_ShouldRrturnAllGamesWithGivenManufacturer()
+        {
+            var options = new DbContextOptionsBuilder<GameDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            var manufacturer = "iv";
+            var context = new GameDbContext(options);
+            SeedData(context);
+            var repository = new GameRepository(context);
+
+
+            var actualResult = repository.SearchByManufacturer(manufacturer).ToList();
+
+            Assert.Equal(2, actualResult.Count);
+        }
 
 
     }
