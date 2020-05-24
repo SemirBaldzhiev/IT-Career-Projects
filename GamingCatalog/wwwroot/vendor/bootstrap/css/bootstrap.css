@@ -5095,7 +5095,7 @@ a.badge-dark:focus, a.badge-dark.focus {
 .jumbotron {
     padding: 2rem 1rem;
     margin-bottom: 2rem;
-    background-image: url("/img/bg-masthead-old.jpg");
+    background-image: url("/img/bg-masthead.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

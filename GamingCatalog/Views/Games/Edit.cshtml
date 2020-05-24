@@ -9,76 +9,93 @@
 <h4>Game</h4>
 <hr />
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <div class="form-row">
-        <div class="col-md-4 mb-3">
+<div class="row justify-content-center ">
+    <div class="col-md-6 justify-content-center">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" class="needs-validation container form-row justify-content-center " novalidate>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
+            <div class="form-group col-md-7">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <input asp-for="Title" class="form-control" required />
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
             </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="form-group">
+            <div class="form-group col-md-3">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <input asp-for="Price" class="form-control" required typeof="decimal" />
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
             </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="form-group">
+            <div class="form-group col-md-3">
                 <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
-                <span asp-validation-for="Rating" class="text-danger"></span>
+                <input asp-for="Rating" class="form-control" required />
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
             </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="form-group">
+            <div class="form-group col-md-7">
                 <label asp-for="ReleaseDate" class="control-label"></label>
-                <input asp-for="ReleaseDate" class="form-control" />
-                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                <input asp-for="ReleaseDate" class="form-control" required />
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
             </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="Platform" class="control-label"></label>
-                <input asp-for="Platform" class="form-control" />
-                <span asp-validation-for="Platform" class="text-danger"></span>
+                <input asp-for="Platform" class="form-control" required />
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control" />
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input type="file" asp-for="Image" accept="image/*" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="form-group">
-                <label asp-for="ManufacturerId" class="control-label"></label>
-                <select asp-for="ManufacturerId" class="form-control" asp-items="ViewBag.ManufacturerId"></select>
-                <span asp-validation-for="ManufacturerId" class="text-danger"></span>
-            </div>
-        </div>
-        <div>
-            @Html.ListBox("Genres")
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-    </div>
-</form>
+            <div class="form-group col-md-6">
+                <label asp-for="Manufacturer" class="control-label"></label>
+                <select asp-for="ManufacturerId" class="form-control" asp-items="ViewBag.ManufacturerId" required></select>
 
+                <div class="invalid-feedback">Please fill out this field.</div>
+                <div class="valid-feedback">Valid.</div>
+            </div>
+            <div class="form-group col-md-10">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" required></textarea>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" asp-for="Image" accept="image/*" class="form-control" required />
+
+            </div>
+            <div class="form-group col-md-4">
+                <label class="control-label">Genres</label>
+
+                <select class="custom-select form-control" asp-items="ViewBag.Genres" multiple></select>
+
+            </div>
+            <div class="form-group btn col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+
+</div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

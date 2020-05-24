@@ -33,6 +33,7 @@
                     </li>
                     @{
                         var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+                        var actionName = this.ViewContext.RouteData.Values["action"].ToString();
                     }
                     @if (controllerName == "Home")
                     {
@@ -41,6 +42,15 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+                        </li>
+                    }
+                    else if (controllerName == "Games" && actionName =="Index")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" asp-controller="Genres" asp-action="Index">Genres</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" asp-controller="Manufacturers" asp-action="Index">Manufacturers</a>
                         </li>
                     }
                     else
