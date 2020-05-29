@@ -4,6 +4,8 @@ using System.Text;
 
 namespace Data.Entities
 {
+
+    //Here we create a manufacturer model for the Database.
     public class Manufacturer
     {
         public int Id { get; set; }

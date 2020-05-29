@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Data;
 using Data.Entities;
@@ -23,6 +20,7 @@ namespace GamingCatalog.Controllers
         }
 
         // GET: Manufacturers
+        //Show all manufacturers.
         public async Task<IActionResult> Index()
         {
             return View(await _manufacturerRepository.GetAll().ToListAsync());    
@@ -54,7 +52,7 @@ namespace GamingCatalog.Controllers
 
         // POST: Manufacturers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //This method create manufacturer.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,Name")] Manufacturer manufacturer)
@@ -85,7 +83,7 @@ namespace GamingCatalog.Controllers
 
         // POST: Manufacturers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Edit the selected manufacturer.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public  IActionResult Edit(int id, [Bind("Id,Name")] Manufacturer manufacturer)
@@ -136,6 +134,7 @@ namespace GamingCatalog.Controllers
         }
 
         // POST: Manufacturers/Delete/5
+        //This method delete selected manufacturer, but if this manufacturer have connection with game we can't delete it.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public  IActionResult DeleteConfirmed(int id)

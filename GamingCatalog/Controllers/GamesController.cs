@@ -10,7 +10,6 @@ using Data.Entities;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Data.Repositories;
-using GamingCatalog.Models;
 
 namespace GamingCatalog.Controllers
 {
@@ -26,10 +25,11 @@ namespace GamingCatalog.Controllers
             _gameRepository = new GameRepository(context);
         }
 
-        // GET: Games
+        //GET: Games
+        //This method show all games in the catalog.
         public  IActionResult Index(string searchString, string gameManufacturer)
         {
-            //var gameDbContext = _context.Games.Include(g => g.Manufacturer);
+            
             var manufacturerList = new List<string>();
           
             var manufacturers = _context.Games.Select(g => g.Manufacturer.Name).ToList();
@@ -41,7 +41,7 @@ namespace GamingCatalog.Controllers
             var games = _gameRepository.GetAll().Include(g => g.Manufacturer).ToList();
 
            
-
+            //Here we filter the games by title and manufacturer.
             if (!String.IsNullOrEmpty(searchString))
             {
                 games = _gameRepository.SearchByTittle(searchString).ToList();
@@ -55,6 +55,7 @@ namespace GamingCatalog.Controllers
         }
 
         // GET: Games/Details/5
+        //This method show the details of the selected game.
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -86,7 +87,7 @@ namespace GamingCatalog.Controllers
 
         // POST: Games/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //This method create a game.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Price,Rating,ReleaseDate,Platform,Description,Image,ManufacturerId")] Game game,int[] Genres, IFormFile Image)
@@ -97,6 +98,7 @@ namespace GamingCatalog.Controllers
 
             if (ModelState.IsValid)
             {
+                //Here we fill the connection table between games and genres.
                 if (Genres != null)
                 {
                     foreach (var genreId in Genres)
@@ -111,15 +113,14 @@ namespace GamingCatalog.Controllers
                         _context.GameGenreConnection.Add(gameGenre);
                     }
                 }
-
+                //Here we add the image of the game.
                 using (var stream = new MemoryStream())
                 {
                     await Image.CopyToAsync(stream);
                     game.Image = stream.ToArray();
                 }
 
-                    _gameRepository.Add(game);
-                //await _context.SaveChangesAsync();
+                _gameRepository.Add(game);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ManufacturerId"] = new SelectList(_context.Manufacturers, "Id", "Name", game.ManufacturerId);
@@ -140,8 +141,6 @@ namespace GamingCatalog.Controllers
                 return NotFound();
             }
 
-            //game.Genres = _context.GameGenreConnection.Where(gc => gc.GameId != game.Id).Select(g => g.Genre).ToList();
-
             ViewData["ManufacturerId"] = new SelectList(_context.Manufacturers, "Id", "Name", game.ManufacturerId);
             ViewBag.Genres = new MultiSelectList(_context.Genres, "Id", "Name");
             return View(game);
@@ -149,7 +148,7 @@ namespace GamingCatalog.Controllers
 
         // POST: Games/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //With this mehod we can edit a selected game.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price,Rating,ReleaseDate,Platform,Description,Image,ManufacturerId")] Game game, int[] Genres, IFormFile Image)
@@ -163,6 +162,7 @@ namespace GamingCatalog.Controllers
             {
                 try
                 {
+                    //Update the data in the connection table between games and genres
                     if (Genres != null)
                     {
                         var gameGenres = _context.GameGenreConnection.Where(g => g.GameId == id).ToList();
@@ -182,12 +182,10 @@ namespace GamingCatalog.Controllers
 
                                 _context.GameGenreConnection.Update(gameGenre);
                             }
-                            else
-                            {
-                                //this genre already exist
-                            }
                         }
                     }
+
+                    //Update the image of the selected game.
                     using (var stream = new MemoryStream())
                     {
                         await Image.CopyToAsync(stream);
@@ -236,6 +234,7 @@ namespace GamingCatalog.Controllers
         }
 
         // POST: Games/Delete/5
+        //This method delete the selected game from the catalog.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public  IActionResult DeleteConfirmed(int id)

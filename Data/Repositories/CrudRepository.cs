@@ -66,7 +66,5 @@ namespace Data.Repositories
         {
             return this._dbSet.Count(predicate);
         }
-
-
     }
 }

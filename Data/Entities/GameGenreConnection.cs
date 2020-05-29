@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Data.Entities
 {
+    //Here is the connection between game and genre.
     public class GameGenreConnection
     {
         public int GameId { get; set; }

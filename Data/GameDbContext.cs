@@ -18,10 +18,7 @@ namespace Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
-
         public DbSet<GameGenreConnection> GameGenreConnection { get; set; }
-
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

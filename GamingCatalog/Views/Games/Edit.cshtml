@@ -4,14 +4,15 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>Game</h4>
-<hr />
 
+<br/>
+<br/>
+<br/>
+<br/>
 <div class="row justify-content-center ">
     <div class="col-md-6 justify-content-center">
-        <form asp-action="Create" method="post" enctype="multipart/form-data" class="needs-validation container form-row justify-content-center " novalidate>
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="needs-validation container form-row justify-content-center " novalidate>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group col-md-7">
                 <label asp-for="Title" class="control-label"></label>
@@ -64,11 +65,11 @@
             <div class="form-group col-md-4">
                 <label class="control-label">Genres</label>
 
-                <select class="custom-select form-control" asp-items="ViewBag.Genres" multiple></select>
+                @Html.ListBox("Genres");
 
             </div>
             <div class="form-group btn col-md-10">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
 

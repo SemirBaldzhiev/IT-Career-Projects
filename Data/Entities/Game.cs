@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
+    //Here we create a game model for the Database.
     public class Game
     {
         public int Id { get; set; }
@@ -33,7 +34,6 @@ namespace Data.Entities
         [NotMapped]
         public ICollection<Genre> Genres { get; set; } = new HashSet<Genre>();
 
-        
         public ICollection<GameGenreConnection> GameGenres { get; set; } = new HashSet<GameGenreConnection>();
 
     }
